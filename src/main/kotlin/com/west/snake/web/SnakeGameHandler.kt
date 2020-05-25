@@ -4,7 +4,6 @@ import com.west.snake.events.GameEvent
 import com.west.snake.events.gameActionEventFromJson
 import com.west.snake.game.ActiveGamesManager
 import org.slf4j.LoggerFactory
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.socket.WebSocketHandler
 import org.springframework.web.reactive.socket.WebSocketSession
