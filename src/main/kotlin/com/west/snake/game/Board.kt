@@ -1,7 +1,7 @@
 package com.west.snake.game
 import kotlin.random.Random
 
-class Board (private val width: Int, private val height: Int) {
+class Board (val width: Int, val height: Int) {
     val snake: Snake = placeNewSnake()
     var apple: BoardCoordinate = placeNewApple()
 
@@ -34,7 +34,7 @@ class Board (private val width: Int, private val height: Int) {
     /**
      * Move the snake in its current direction and return true if it survives, false if it dies.
      */
-    fun moveSnake(): Boolean {
+    fun moveSnake(): Pair<Boolean, Boolean> {
         // Is the snake about to eat an apple?
         val eatingApple = willSnakeEatTheApple()
 
@@ -49,7 +49,7 @@ class Board (private val width: Int, private val height: Int) {
             }
         }
 
-        return !gonnaDie
+        return Pair(!gonnaDie, eatingApple)
     }
 
     private fun willSnakeEatTheApple() = snake.getNextCoordinate() == apple

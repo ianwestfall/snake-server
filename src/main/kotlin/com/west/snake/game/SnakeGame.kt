@@ -20,9 +20,12 @@ class SnakeGame (private val id: Int, boardWidth: Int, boardHeight: Int) {
         board.snake.setNewDirection(gameActionEvent.actionDirection)
 
         // Move the snake
-        active = board.moveSnake()
+        val (stillAlive, scored) = board.moveSnake()
+        active = stillAlive
+        if (scored) {
+            score++
+        }
         turnNumber++
-
 
         return active
     }
@@ -34,6 +37,8 @@ class SnakeGame (private val id: Int, boardWidth: Int, boardHeight: Int) {
             |"turnNumber": ${turnNumber},
             |"gameOver": ${!active}, 
             |"board": {
+                |"width": ${board.width},
+                |"height": ${board.height},
                 |"apple": ${board.apple.toJson()},
                 |"snake": {
                     |"direction": "${board.snake.direction}",
