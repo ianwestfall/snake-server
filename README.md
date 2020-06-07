@@ -3,8 +3,8 @@ This is a Kotlin/Spring-Boot/WebFlux/WebSockets server that manages client's gam
 This project will eventually be used to train a neural network to play Snake. 
 
 ## Running it
-The project can be run with:
-```mvnw spring-boot:run```
+The project can be run with:  
+    ```mvnw spring-boot:run```
 
-Tests can be run with:
-```mvnw test```
+Tests can be run with:  
+    ```mvnw test```
