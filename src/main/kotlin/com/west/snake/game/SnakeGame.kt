@@ -3,7 +3,7 @@ package com.west.snake.game
 import com.west.snake.events.GameActionEvent
 import org.slf4j.LoggerFactory
 
-class SnakeGame (private val id: Int, boardWidth: Int, boardHeight: Int) {
+class SnakeGame (val id: Int, boardWidth: Int, boardHeight: Int) {
     private val board = Board(boardWidth, boardHeight)
     private var score: Int = 0
     private var turnNumber: Int = 0

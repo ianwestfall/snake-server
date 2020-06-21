@@ -11,7 +11,8 @@ import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAd
 
 @EnableWebFlux
 @SpringBootApplication
-class WebSocketConfig(val primeNumbersHandler: PrimeNumbersHandler, val snakeGameHandler: SnakeGameHandler) {
+class WebSocketConfig(val snakeGameHandler: SnakeGameHandler,
+                      val snakeGameMonitorHandler: SnakeGameMonitorHandler) {
     @Bean
     fun websocketHandlerAdapter() = WebSocketHandlerAdapter()
 
@@ -19,9 +20,8 @@ class WebSocketConfig(val primeNumbersHandler: PrimeNumbersHandler, val snakeGam
     fun handlerMapping(): HandlerMapping {
         val handlerMapping = SimpleUrlHandlerMapping()
         handlerMapping.urlMap = mapOf(
-                "/ws/primes" to primeNumbersHandler,
-                "ws/snake/play" to snakeGameHandler
-                // "ws/snake/monitor" to primeNumbersHandler
+                "ws/snake/play" to snakeGameHandler,
+                "ws/snake/monitor" to snakeGameMonitorHandler
         )
         handlerMapping.order = 1
         return handlerMapping

@@ -15,9 +15,6 @@ class SnakeGameHandler (val activeGamesManager: ActiveGamesManager): WebSocketHa
 
     override fun handle(session: WebSocketSession): Mono<Void> {
         val gameId = activeGamesManager.addGame()
-        val game = activeGamesManager.getGame(gameId)
-        val source = activeGamesManager.getGameProcessor(gameId)
-        val sink = source.sink()
 
         logger.info("$gameId - New session")
 
@@ -29,23 +26,19 @@ class SnakeGameHandler (val activeGamesManager: ActiveGamesManager): WebSocketHa
         }.doOnNext { gameActionEvent ->
             logger.info("$gameId - taking action")
 
-            // Act on the event's action and send the game to the sink
-            val gameOver = !game.takeAction(gameActionEvent)
-            sink.next(game)
-
-            // Close the conection if the game has ended
-            if (gameOver) {
-                logger.info("$gameId - Game over")
-                activeGamesManager.endGame(gameId)
-            }
+            // Process the game action
+            activeGamesManager.advanceGame(gameId, gameActionEvent)
         }.then()
 
-        // Send the initial game state to the client then start responding to their actions
-        val output = session.send(Mono.just(session.textMessage(GameEvent(game).toJson()))).and(
-                session.send(source.map {updatedGame ->
+        val output = session.send(
+                // Send the initial game state to the client
+                Mono.just(session.textMessage(GameEvent(activeGamesManager.getGame(gameId)).toJson())))
+
+                // Send each updated game state as events are processed
+                .and(session.send(activeGamesManager.getGameProcessor(gameId).map {updatedGame ->
                     logger.info("$gameId - responding with new game status")
 
-                    // Send the newly updated game state to back to the client
+                    // Send the newly updated game state back to the client
                     session.textMessage(GameEvent(updatedGame).toJson())
                 }))
 
